@@ -38,6 +38,7 @@ Notice how the second half of the model mirrors the first. To produce a test vid
 ## 4 Optimizations and modifications
 The prototype model we use is an FCN model discussed in the previous section. The convolution part consists one Batch Normalization layer, two Convolution+ReLU layers, one MaxPooling layer, three Convolution+ReLU+Dropout layers, one MaxPooling layer, then followed by two Convolu-tion+ReLU+Dropout layers and one MaxPooling layer. The deconvolution part is just the reverse order, just changing the MaxPooling to Upsampling, Convolution to Deconvolution.
 We trained this model for ten epochs, and found it can deal with the urban roads successfully, but when dealing with rural and countryside cases, the performance was fair at best. We observed some noise when road curves as showed in fig. 5 (the noise marked by red circles). Overall we were not satisfied with this result. So we tried to do some refinements on our prototype and produce some models that could meet our requirements.
+
 ![fig5](https://user-images.githubusercontent.com/19624843/63896973-b5f34180-c9c1-11e9-984f-d0ebe25af712.png)
 
 ![fig6](https://user-images.githubusercontent.com/19624843/63896977-b7bd0500-c9c1-11e9-86f9-8ba6b3465101.png)
@@ -64,7 +65,7 @@ Though this kind of manually labelling approximately 500 frames served our purpo
 
 We first make 2 copies of the image and convert one image to YCbCr colorspace, and do a histogram equalization of the luma part of the image. Next, we take the L2 norm of the individual components of the RGB image, and then divide each component of the RGB image with this L2 norm. Then concatenate the 3 normalized components to get a brighter image with reduced shadows. We then use the following model to project the 2D normalized chromaticity image onto a 1D illumination invariant image:
 
-Eqn 1
+![fig17](https://user-images.githubusercontent.com/19624843/63897183-4f225800-c9c2-11e9-9095-5dac2e403e4f.JPG)
 
 where θ is the projecting direction, and inv is the 1d shadow free invariant image. R, G, and B are the individual color channels of each frame.
 We then filter out the noise and outliers using a median filter with a kernel size of 15x15 pixels on both the histogram equalized YCbCr image and the 1D illumination invariant image. This is followed by a dilation operation on both images with a ’line’ structuring element of size 11 pixels, followed by an erosion operation using the same structuring element. The combination these two operations is called morphological closing, and is done to detect edges in a smoothed image. We then use a canny edge detector to detect the edges of the road on both the images. The histogram equalized YCbCr processed image is used to get the left edge of the road, while the RGB processed image is used to get the right edge of the road. The two images are then finally added together to get the edges of both edges of the road. The result of the above described algorithm is shown in fig. 10a and 10b.
