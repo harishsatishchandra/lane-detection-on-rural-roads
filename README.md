@@ -1,11 +1,12 @@
 # Road Detection Using Fully Convolutional Networks
 
 We approach the problem of road detection for autonomous vehicles by using a machine learning approach on images from a dash-mounted camera. Considering the challenge presented by rural and poorly marked roads, we develop and optimize a fully convolutional network (FCN), and demonstrate the model’s robustness on a variety of roads. Finally we discover a limitation in our model, and devise method-ologies for automatically generating additional training data that will counteract this. The result of our method can be seen in the following animation.
-
+<p align="center">
 ![lane_gif](https://user-images.githubusercontent.com/19624843/63896844-64e34d80-c9c1-11e9-9b0b-260a372a5ad5.gif)
-
+</p>
+<p align="center">
 ![unlane_gif](https://user-images.githubusercontent.com/19624843/63896871-73ca0000-c9c1-11e9-9e3e-cc8d375a7045.gif)
-
+</p>
 ## 1 Introduction
 Research into autonomous driving is becoming more and more popular. Road detection is an essential ability for safe navigation of a car by either a human driver or a computer. A road detection program also represents an intermediate step to full autonomy, with the ability to alert an inattentive driver when they drift from their lane. Vehicles this this capability are on the road today, and continued research into the problem will continue for some time.
 Our project is to use a machine learning approach to this problem, trying to help a computer detect the road by using data from front facing camera or dash cam, a cheaper alternative to radar or lidar. In reviewing methodologies that exist, we noticed a focus on highways and urban roads which are clearly marked by lines and other isolation strips. We sought to design a model that was also robust on rural roads, which are more challenging due to more variabilities and more vague markings.
